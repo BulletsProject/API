@@ -1,6 +1,13 @@
 package logic.dto.response;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
 import logic.common.Tools;
+import logic.dto.response.opengraph.Image;
+import models.ArticleOgField;
 import models.views.ArticleView;
 import models.views.ShortView;
 
@@ -46,10 +53,40 @@ public class ArticleResponse extends Response {
 		shortsCount = (long)article.shorts.size();
 		shortsBest = new ArticleShort[article.shorts.size()];
 		
-		int count = 0;
+		List<ArticleShort> shorts = new LinkedList<ArticleShort>();
 		for(ShortView shortElem : article.shorts) {
-			shortsBest[count++] = new ArticleShort(shortElem);
+			shorts.add(new ArticleShort(shortElem));
 		}
+		
+		Collections.sort(shorts, new Comparator<ArticleShort> () {
+			@Override
+			public int compare(ArticleShort first, ArticleShort second) {
+				long result = first.getLikesCount() - second.getLikesCount();
+				if (result < 0) return -1;
+				if (result > 0) return 1;
+				return 0;
+			}
+		});
+		
+		shortsBest = shorts.toArray(new ArticleShort[] {});
+		
+		ArticleOgField articleOgField = ArticleOgField.find
+				.where()
+				.eq("article.pkid", article.pkid)
+				.eq("ogfield.pkid", 1)
+				.findUnique();
+		
+		if (articleOgField != null) {
+		
+			Image[] images = new Image[1];
+			Image image = new Image();
+			image.setUrl(articleOgField.value);
+			images[0] = image;
+			
+			openGraph = new OpenGraph();
+			openGraph.setImage(images);
+		}
+
 	}
 	
 	public Long getId() {

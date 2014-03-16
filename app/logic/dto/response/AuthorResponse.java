@@ -15,6 +15,9 @@ public class AuthorResponse extends Response {
 	@JsonProperty("id")
 	private Long id;
 	
+	@JsonProperty("facebook_id")
+	private String facebookId;	
+	
 	@JsonProperty("first_name")
 	private String firstName;
 	
@@ -40,6 +43,7 @@ public class AuthorResponse extends Response {
 	
 	public AuthorResponse(AuthorView authorElem) {
 		id = authorElem.pkid;
+		facebookId = authorElem.facebookId;
 		firstName = authorElem.firstName;
 		lastName = authorElem.lastName;
 		email = authorElem.email;

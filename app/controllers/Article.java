@@ -245,7 +245,8 @@ public class Article extends Controller {
 			return ok(msg);
 		}
 		catch(Exception ex) {
-			return badRequest();
+
+			return ok(ex.getMessage());
 		}
 	}
 	

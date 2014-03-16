@@ -34,5 +34,53 @@ public class ArticleShort {
 		bullets = new String[] {shortView.bullet1, shortView.bullet2, shortView.bullet3, shortView.bullet4, shortView.bullet5 };
 		author = new AuthorResponse(shortView.author);
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Long getLikesCount() {
+		return likesCount;
+	}
+
+	public void setLikesCount(Long likesCount) {
+		this.likesCount = likesCount;
+	}
+
+	public String[] getBullets() {
+		return bullets;
+	}
+
+	public void setBullets(String[] bullets) {
+		this.bullets = bullets;
+	}
+
+	public AuthorResponse getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(AuthorResponse author) {
+		this.author = author;
+	}
 	
 }

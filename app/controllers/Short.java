@@ -1,7 +1,9 @@
 package controllers;
 
 import java.util.Date;
+import java.util.Map;
 
+import logic.ShortLogic;
 import logic.common.Tools;
 import logic.dto.request.RequestHandler;
 import logic.dto.request.ShortRequest;
@@ -13,6 +15,7 @@ import logic.exceptions.ExceptionHandler;
 import logic.exceptions.IncorrectFacebookId;
 import logic.exceptions.LikeAlreadyPosted;
 import logic.exceptions.LogicException;
+import logic.exceptions.ParameterMissing;
 import logic.exceptions.ShortAlreadyPosted;
 import logic.exceptions.ShortNotFound;
 import models.Author;
@@ -24,12 +27,20 @@ import com.avaje.ebean.Ebean;
 
 public class Short extends Controller {
 
-	public static Result like(Long id, String imei) {
+	public static Result like(Long id) {
 		
+		Map<String, String[]> formData = request().body().asFormUrlEncoded();
+	
 		ShortLikeResponse response = new ShortLikeResponse();
 		
 		try {
 		
+			if (formData.containsKey("imei")) {
+				throw new ParameterMissing("imei");
+			}	
+			
+			String imei = formData.get("imei")[0];
+			
 			models.Short shortElement = models.Short.find.byId(id);
 			if (shortElement == null) {
 				throw new ShortNotFound();
@@ -68,33 +79,42 @@ public class Short extends Controller {
 		}
 	}
 	
-	private static Author retrieveFacebookId(String accessToken) throws IncorrectFacebookId {
-		if (false) throw new IncorrectFacebookId();
+	private static Author retrieveFacebookId(String signedRequest) 
+	throws IncorrectFacebookId {
 		
-		Author author = new Author();
-		author.email = "aaa@mailinator.com";
-		author.firstName = "Jan";
-		author.lastName = "Kowalski";
-		author.facebookId = accessToken;
-		author.created = new Date();
+		ShortLogic logic = new ShortLogic();
+		Author facebookAuthor = logic.validateFacebookUser(signedRequest); 
 		
-		return author;
+		return facebookAuthor;
 	}
 	
-	public static Result post(String shortElement, String accessToken) {
-		
+	public static Result post() {
+
+		Map<String, String[]> formData = request().body().asFormUrlEncoded();
+
 		ShortPostResponse response = new ShortPostResponse();
 		
 		try {
-		
+			
+			if (!formData.containsKey("shortElement")) {
+				throw new ParameterMissing("shortElement");
+			}
+
+			if (!formData.containsKey("signedRequest")) {
+				throw new ParameterMissing("signedRequest");
+			}		
+			
+			String shortElement = formData.get("shortElement")[0];
+			String signedRequest = formData.get("signedRequest")[0];
+			
 			RequestHandler<ShortRequest> handler = new RequestHandler<>(ShortRequest.class);
 			ShortRequest shortElem = handler.parseRequest(shortElement);
-			
+
 			String articleUrl = shortElem.getArticleUrl();
 			String md5 = Tools.md5(articleUrl);
 			
 			Integer categoryId = shortElem.getCategoryId();
-			
+
 			Category category = Category.find.byId(categoryId.longValue());
 			if (category == null) {
 				throw new CategoryNotExists();
@@ -108,18 +128,19 @@ public class Short extends Controller {
 				article.created = new Date();
 			}
 			
-			Author facebookAuthor = retrieveFacebookId(accessToken);
+			Author facebookAuthor = retrieveFacebookId(signedRequest);			
 			
 			Author author = models.Author.find.where().ieq("facebookId", facebookAuthor.facebookId).findUnique();
 			if (author == null) {
 				author = facebookAuthor;
 			}
 			
-			if (author.pkid > 0 && article.pkid > 0) {
+			if (author.pkid != null && article.pkid != null) {
+				
 				int previousShorts = models.Short.find
 					.where()
 					.eq("author.pkid", author.pkid)
-					.eq("article.pkid", article.pkid).findList().size();
+					.eq("article.pkid", article.pkid).findRowCount();
 				
 				if (previousShorts > 0) {
 					throw new ShortAlreadyPosted();
@@ -137,7 +158,7 @@ public class Short extends Controller {
 			newShort.category = category;
 			newShort.created = new Date();
 			newShort.title = shortElem.getTitle();
-			
+	
 			Ebean.save(article);
 			Ebean.save(author);
 			Ebean.save(newShort);

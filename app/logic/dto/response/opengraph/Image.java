@@ -21,5 +21,53 @@ public class Image {
 	
 	@JsonProperty(value = "og_image_user_generated", required = false)
 	private boolean userGenerated;
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getSecureUrl() {
+		return secureUrl;
+	}
+
+	public void setSecureUrl(String secureUrl) {
+		this.secureUrl = secureUrl;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Integer getWidth() {
+		return width;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	public Integer getHeight() {
+		return height;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
+	public boolean isUserGenerated() {
+		return userGenerated;
+	}
+
+	public void setUserGenerated(boolean userGenerated) {
+		this.userGenerated = userGenerated;
+	}
 	
 }
