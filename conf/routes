@@ -1,0 +1,19 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+
+GET		/article/id/:id				controllers.Article.getById(id: Long)
+GET 	/article/url/:url			controllers.Article.getByUrl(url: String)
+GET		/article/category/id/:id 	controllers.Article.getByCategory(id: Long, offset: Long ?= 0, limit: Integer ?= 100)
+GET 	/article/user/id/:id 		controllers.Article.getByUser(id: String, offset: Long ?= 0, limit: Integer ?= 100)
+GET 	/article/feed				controllers.Article.getFeed(offset: Long ?= 0, limit: Integer ?= 100)
+
+POST	/short/like/id/:id/imei/:imei	controllers.Short.like(id: Long, imei: String)
+POST	/short/post						controllers.Short.post(shortElement: String, accessToken: String) 
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
