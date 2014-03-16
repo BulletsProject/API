@@ -3,6 +3,7 @@ package models;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -32,10 +33,13 @@ public class Article extends Model {
 	@Column(name="url_hash")
 	public String urlHash;
 	
+	@Column(name="title")
+	public String title;	
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date created;
 	
-	@OneToMany(mappedBy="article")
+	@OneToMany(mappedBy="article", cascade = {CascadeType.PERSIST})
 	public List<ArticleOgField> ogfields;
 	
 	@OneToMany(mappedBy="article")

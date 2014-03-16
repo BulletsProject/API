@@ -33,6 +33,9 @@ public class ArticleView extends Model {
 	@Column(name="url_hash")
 	public String urlHash;
 	
+	@Column(name="title")
+	public String title;	
+	
 	@Temporal(TemporalType.TIMESTAMP)
 	public Date created;
 

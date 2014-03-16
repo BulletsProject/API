@@ -12,7 +12,6 @@ import logic.dto.response.ShortLikeResponse;
 import logic.dto.response.ShortPostResponse;
 import logic.exceptions.CategoryNotExists;
 import logic.exceptions.ExceptionHandler;
-import logic.exceptions.IncorrectFacebookId;
 import logic.exceptions.LikeAlreadyPosted;
 import logic.exceptions.LogicException;
 import logic.exceptions.ParameterMissing;
@@ -79,20 +78,14 @@ public class Short extends Controller {
 		}
 	}
 	
-	private static Author retrieveFacebookId(String signedRequest) 
-	throws IncorrectFacebookId {
-		
-		ShortLogic logic = new ShortLogic();
-		Author facebookAuthor = logic.validateFacebookUser(signedRequest); 
-		
-		return facebookAuthor;
-	}
+
 	
 	public static Result post() {
 
 		Map<String, String[]> formData = request().body().asFormUrlEncoded();
 
 		ShortPostResponse response = new ShortPostResponse();
+		ShortLogic logic = new ShortLogic();
 		
 		try {
 			
@@ -126,9 +119,14 @@ public class Short extends Controller {
 				article.url = articleUrl;
 				article.urlHash = md5;
 				article.created = new Date();
+				
+				try {
+					logic.processOpenGraph(article);
+				}
+				catch(Exception ex) {}
 			}
 			
-			Author facebookAuthor = retrieveFacebookId(signedRequest);			
+			Author facebookAuthor = logic.validateFacebookUser(signedRequest);
 			
 			Author author = models.Author.find.where().ieq("facebookId", facebookAuthor.facebookId).findUnique();
 			if (author == null) {

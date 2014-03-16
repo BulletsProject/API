@@ -17,7 +17,8 @@ libraryDependencies ++= Seq(
   "org.json" % "json" % "20140107",
   "org.apache.commons" % "commons-lang3" % "3.2.1",
   "commons-codec" % "commons-codec" % "1.9",
-  "com.restfb" % "restfb" % "1.6.14"
+  "com.restfb" % "restfb" % "1.6.14",
+  "org.jsoup" % "jsoup" % "1.7.2"
 )     
 
 play.Project.playJavaSettings
