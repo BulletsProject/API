@@ -7,6 +7,7 @@ CREATE VIEW `articles_view` AS
         `a`.`pkid` AS `pkid`,
         `a`.`url` AS `url`,
         `a`.`url_hash` AS `url_hash`,
+        `a`.`title` AS `title`,
         `a`.`created` AS `created`,
         (time_to_sec(timediff(now(), `a`.`created`)) / 3600) AS `time_difference`,
         (select 
@@ -28,5 +29,5 @@ CREATE VIEW `articles_view` AS
         
 # --- !Downs
 
-DROP TABLE `articles_view`
+DROP VIEW `articles_view`
         

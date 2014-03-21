@@ -36,5 +36,5 @@ CREATE VIEW `authors_view` AS
         
 # --- !Downs
 
-DROP TABLE `authors_view`
+DROP VIEW `authors_view`
         

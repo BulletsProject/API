@@ -10,5 +10,5 @@ CREATE VIEW `categories_view` AS
 
 # --- !Downs
 
-DROP TABLE `categories_view`
+DROP VIEW `categories_view`
         

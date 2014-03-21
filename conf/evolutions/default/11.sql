@@ -32,4 +32,4 @@ CREATE VIEW `shorts_view` AS
         
 # --- !Downs
 
-DROP TABLE `shorts_view`
+DROP VIEW `shorts_view`
