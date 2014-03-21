@@ -1,5 +1,5 @@
-# authors table
-
+# Authors
+ 
 # --- !Ups
 
 CREATE TABLE `authors` (
@@ -7,7 +7,7 @@ CREATE TABLE `authors` (
   `facebook_id` varchar(45) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`pkid`),
   UNIQUE KEY `pkid_UNIQUE` (`pkid`),
@@ -17,3 +17,4 @@ CREATE TABLE `authors` (
 # --- !Downs
 
 DROP TABLE `authors`
+

@@ -1,43 +1,23 @@
-# shorts_view
-
+# Initial data
+ 
 # --- !Ups
 
-CREATE 
-VIEW `authors_view` AS
-    select 
-        `a`.`pkid` AS `pkid`,
-        `a`.`facebook_id` AS `facebook_id`,
-        `a`.`first_name` AS `first_name`,
-        `a`.`last_name` AS `last_name`,
-        `a`.`email` AS `email`,
-        `a`.`created` AS `created`,
-        (select 
-                count(`l`.`pkid`)
-            from
-                (`likes` `l`
-                join `shorts` `s`)
-            where
-                ((`l`.`shortid` = `s`.`pkid`)
-                    and (`s`.`authorid` = `a`.`pkid`))) AS `likes_amount`,
-        (select 
-                count(`s`.`pkid`)
-            from
-                `shorts` `s`
-            where
-                (`s`.`authorid` = `a`.`pkid`)) AS `shorts_amount`,
-        (select 
-                count(`ar`.`pkid`)
-            from
-                (`articles` `ar`
-                join `shorts` `s` ON ((`ar`.`pkid` = `s`.`articleid`)))
-            where
-                (`s`.`authorid` = `a`.`pkid`)) AS `articles_amount`
-    from
-        `authors` `a`;
+INSERT INTO `ogfields` (`name`) VALUES ('og:image');
+INSERT INTO `categories` (`name`) VALUES ('Science');
+INSERT INTO `categories` (`name`) VALUES ('Technology');
+INSERT INTO `categories` (`name`) VALUES ('Business');
+INSERT INTO `categories` (`name`) VALUES ('Global Issues');
+INSERT INTO `categories` (`name`) VALUES ('Art and Culture');
+INSERT INTO `categories` (`name`) VALUES ('History');
+INSERT INTO `categories` (`name`) VALUES ('Nature');
 
 # --- !Downs
 
-DROP VIEW `shorts_view`
-
-
-
+DELETE FROM `ogfields` WHERE name = 'og:image';
+DELETE FROM `categories` WHERE name = 'Science';
+DELETE FROM `categories` WHERE name = 'Technology';
+DELETE FROM `categories` WHERE name = 'Business';
+DELETE FROM `categories` WHERE name = 'Global Issues';
+DELETE FROM `categories` WHERE name = 'Art and Culture';
+DELETE FROM `categories` WHERE name = 'History';
+DELETE FROM `categories` WHERE name = 'Nature';

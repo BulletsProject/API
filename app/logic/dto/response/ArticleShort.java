@@ -30,6 +30,10 @@ public class ArticleShort {
 		id = shortView.pkid;
 		userId = shortView.author.pkid;
 		title = shortView.title;
+		if (title == null || title.isEmpty()) {
+			title = shortView.article.title;
+		}
+		
 		likesCount = shortView.likesCount;
 		bullets = new String[] {shortView.bullet1, shortView.bullet2, shortView.bullet3, shortView.bullet4, shortView.bullet5 };
 		author = new AuthorResponse(shortView.author);
